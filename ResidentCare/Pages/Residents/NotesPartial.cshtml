@@ -1,0 +1,32 @@
+﻿@model  Models.Resident
+
+<hr />
+<h2>Notes</h2>
+<p>
+    <a asp-page="/Notes/Create" asp-route-residentid="@Model.ResidentId">Create New Note</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Notes.ToList()[0].Text)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Notes)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    <a asp-page="/Notes/Edit" asp-route-id="@item.NoteId" asp-route-screensource="Details">Edit</a> |
+                    <a asp-page="/Notes/Details" asp-route-id="@item.NoteId">Details</a> |
+                    <a asp-page="/Notes/Delete" asp-route-id="@item.NoteId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

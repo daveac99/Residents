@@ -1,0 +1,41 @@
+@page
+@model ResidentCare.Pages.Notes.IndexModel
+@{
+    ViewData["Title"] = "Notes";
+}
+<h2>Notes</h2>
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Note[0].Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Note[0].Resident)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Note)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Resident.FirstName)
+                    @Html.DisplayFor(modelItem => item.Resident.LastName)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.NoteId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.NoteId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.NoteId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

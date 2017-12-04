@@ -1,0 +1,138 @@
+@page
+@model ResidentCare.Pages.Residents.IndexModel
+@{
+    ViewData["Title"] = "Residents";
+}
+
+
+
+<h2>Residents</h2>
+<p class="noprint">
+    <a class="btn btn-info" asp-page="Create">Create New Resident</a>
+
+
+    <input type="button" class="btn btn-default noprint" value="Print this page" onclick="window.print()" />
+</p>
+
+<div class="row noprint">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <input asp-for="@Model.SearchString" class="form-control" />
+                <input type="submit" value="Search by Last Name" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Resident[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Resident[0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Resident[0].Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Resident[0].MedicalRequirements)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Resident[0].Allergies)
+            </th>
+            <th>
+                Notes
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.Resident)
+            {
+                var successClass = "";
+                if (item.ResidentId == Model.ShowNotesForResidentId)
+                { successClass = "success"; }
+                var notesCount = item.Notes?.Count ?? 0;
+
+            <tr class="@successClass">
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MedicalRequirements)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Allergies)
+                </td>
+                <td>
+
+                    @( notesCount > 0 ? notesCount.ToString() : string.Empty)
+                </td>
+                <td class="noprint">
+                    @if (Model.ShowNotesForResidentId != @item.ResidentId)
+                    {
+                        if (notesCount > 0)
+                        {
+                            <a asp-page="./Index" asp-route-showNotesForResidentId="@item.ResidentId">Show Notes</a> <span>|</span>
+                        }
+                        else
+                        {
+                            <a asp-page="/Notes/Create" asp-route-residentid="@item.ResidentId">Create Note</a><span>|</span>
+                        }
+                    }
+                    else
+                    {
+                        <a asp-page="./Index" asp-route-showNotesForResidentId="">Hide Notes</a> <span>|</span>
+                    }
+                    <a asp-page="./Edit" asp-route-id="@item.ResidentId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ResidentId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ResidentId">Delete</a>
+                </td>
+
+            </tr>
+
+            @if (item.ResidentId == Model.ShowNotesForResidentId)
+                {
+
+                <tr class="warning noprint">
+                    <td>
+                        <a href="/Notes/Create?residentid=@item.ResidentId">Create New Note</a>
+                    </td>
+                </tr>
+
+
+                        @foreach (var note in item.Notes)
+                    {
+                            <tr class="warning">
+                                <td colspan="5">
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                    @Html.DisplayFor(modelItem => note.Text)
+                                </td>
+                                <td class="noprint">
+                                    <a asp-page="/Notes/Edit" asp-route-id="@note.NoteId" asp-route-screensource="Index"><span title="Edit" class="glyphicon glyphicon-edit"></span></a> |
+                                    <a asp-page="/Notes/Details" asp-route-id="@note.NoteId"><span title="Details" class="glyphicon glyphicon-list"></span></a> |
+                                    <a asp-page="/Notes/Delete" asp-route-id="@note.NoteId"><span title="Delete" class="glyphicon glyphicon-trash"></span></a>
+                                </td>
+                            </tr>
+                        }
+
+
+
+            }
+
+
+
+
+        }
+    </tbody>
+</table>
