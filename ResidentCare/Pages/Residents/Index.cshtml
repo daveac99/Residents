@@ -136,3 +136,25 @@
         }
     </tbody>
 </table>
+
+@section Scripts
+{
+<script>
+
+    $(document).scroll(function () {
+        localStorage.page = document.URL.split("?")[0];   //remove any parameters - just use the page name
+        localStorage.scrollTop = $(document).scrollTop();
+    });
+
+
+    $(document).ready(function () {
+        //alert(localStorage.page)
+        if (localStorage.page === document.URL.split("?")[0]) {
+            $(document).scrollTop(localStorage.scrollTop);
+        }
+    });
+
+</script>
+
+}
+
